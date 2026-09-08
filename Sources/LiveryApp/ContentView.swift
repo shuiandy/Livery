@@ -88,12 +88,14 @@ struct ContentView: View {
     }
 
     private var subtitle: String {
-        func apps(_ n: Int) -> String { n == 1 ? "1 app" : "\(n) apps" }
+        func apps(_ n: Int) -> String { n == 1 ? String(localized: "1 app") : String(localized: "\(n) apps") }
         switch library.section ?? .all {
-        case .all: return "\(apps(library.apps.count)), \(library.trackedCount) with custom icons"
+        case .all: return String(localized: "\(apps(library.apps.count)), \(library.trackedCount) with custom icons")
         case .custom, .recent: return apps(library.trackedCount)
         case .attention: return apps(library.attentionCount)
-        case .discover: return "\(library.iconSource == .iconic ? "Iconic catalog" : "macosicons.com"), 30,000 icons"
+        case .discover:
+            let catalog = library.iconSource == .iconic ? String(localized: "Iconic catalog") : "macosicons.com"
+            return String(localized: "\(catalog), 30,000 icons")
         }
     }
 
@@ -115,12 +117,12 @@ struct ContentView: View {
 
     private var ownershipTitle: String {
         guard let prompt = library.ownershipPrompt else { return "" }
-        return prompt.names.count == 1 ? "\(prompt.names[0]) is owned by root" : "\(prompt.names.count) apps are owned by root"
+        return prompt.names.count == 1 ? String(localized: "\(prompt.names[0]) is owned by root") : String(localized: "\(prompt.names.count) apps are owned by root")
     }
 
     private func ownershipMessage(_ prompt: OwnershipPrompt) -> String {
         let list = prompt.names.joined(separator: ", ")
-        return "The App Store or an installer left \(list) owned by root, so nothing running as you can write into the bundle. Livery writes these through a small helper that runs as root. macOS asks for permission once; after that icons are written silently, including repairs after an app updates."
+        return String(localized: "The App Store or an installer left \(list) owned by root, so nothing running as you can write into the bundle. Livery writes these through a small helper that runs as root. macOS asks for permission once; after that icons are written silently, including repairs after an app updates.")
     }
 }
 
@@ -202,21 +204,21 @@ struct AttentionBanner: View {
     private func detail(for apps: [AppItem]) -> String {
         let clauses = apps.prefix(3).map { app -> String in
             switch app.state {
-            case .folderIcon: return "\(app.name) shows a folder in Finder"
-            case .reverted: return "\(app.name) fell back to its stock icon"
-            case .missing: return "\(app.name) is no longer where it was"
+            case .folderIcon: return String(localized: "\(app.name) shows a folder in Finder")
+            case .reverted: return String(localized: "\(app.name) fell back to its stock icon")
+            case .missing: return String(localized: "\(app.name) is no longer where it was")
             case .healthy, .untracked: return app.name
             }
         }
         var sentence: String
         switch clauses.count {
         case 1: sentence = clauses[0]
-        case 2: sentence = clauses.joined(separator: " and ")
-        default: sentence = clauses.joined(separator: ", ")
+        case 2: sentence = clauses.joined(separator: String(localized: " and "))
+        default: sentence = clauses.joined(separator: String(localized: ", "))
         }
-        if apps.count > 3 { sentence += ", and \(apps.count - 3) more" }
-        sentence += "."
-        if !library.fixableApps.isEmpty { sentence += " Repair writes the kept icons back." }
+        if apps.count > 3 { sentence += String(localized: ", and \(apps.count - 3) more") }
+        sentence += String(localized: ".")
+        if !library.fixableApps.isEmpty { sentence += String(localized: " Repair writes the kept icons back.") }
         return sentence
     }
 }

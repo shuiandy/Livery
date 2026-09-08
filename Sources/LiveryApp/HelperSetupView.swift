@@ -24,8 +24,8 @@ struct HelperSetupView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            SetupStep(number: 1, status: loginStatus, title: "Allow Livery in the background",
-                      detail: "System Settings › General › Login Items & Extensions › Allow in the Background. Turn on Livery.") {
+            SetupStep(number: 1, status: loginStatus, title: String(localized: "Allow Livery in the background"),
+                      detail: String(localized: "System Settings › General › Login Items & Extensions › Allow in the Background. Turn on Livery.")) {
                 HStack(spacing: 8) {
                     if library.helperState == .notInstalled || library.helperState == .unknown {
                         Button("Register helper") {
@@ -37,7 +37,7 @@ struct HelperSetupView: View {
                 .controlSize(.small)
             }
 
-            SetupStep(number: 2, status: grantStatus, title: "Let the helper manage apps",
+            SetupStep(number: 2, status: grantStatus, title: String(localized: "Let the helper manage apps"),
                       detail: grantDetail) {
                 if library.helperNeeded {
                     HStack(spacing: 8) {
@@ -81,27 +81,27 @@ struct HelperSetupView: View {
 
     private var loginStatus: SetupStatus {
         switch library.helperState {
-        case .enabled: return .done("Approved")
-        case .requiresApproval: return .waiting("Waiting for the switch")
-        case .notInstalled, .unknown: return .waiting("Not registered yet")
+        case .enabled: return .done(String(localized: "Approved"))
+        case .requiresApproval: return .waiting(String(localized: "Waiting for the switch"))
+        case .notInstalled, .unknown: return .waiting(String(localized: "Not registered yet"))
         }
     }
 
     private var grantStatus: SetupStatus {
-        guard library.helperNeeded else { return .done("Not needed: no app here is owned by root") }
-        guard library.helperState == .enabled else { return .blocked("After step 1") }
-        guard library.helperReachable else { return .waiting("Helper starting…") }
+        guard library.helperNeeded else { return .done(String(localized: "Not needed: no app here is owned by root")) }
+        guard library.helperState == .enabled else { return .blocked(String(localized: "After step 1")) }
+        guard library.helperReachable else { return .waiting(String(localized: "Helper starting…")) }
         switch library.helperGrant {
-        case .allowed: return .done("Approved")
-        case .denied: return .waiting("Waiting for the switch")
-        case .unknown: return .waiting("Checking…")
+        case .allowed: return .done(String(localized: "Approved"))
+        case .denied: return .waiting(String(localized: "Waiting for the switch"))
+        case .unknown: return .waiting(String(localized: "Checking…"))
         }
     }
 
     private var grantDetail: String {
         library.helperNeeded
-            ? "Ask macOS puts Livery on the list under System Settings › Privacy & Security › App Management, or shows an approval dialog. Make sure the Livery switch there is on. The helper lives inside Livery, so this one switch covers both."
-            : "Every app on this Mac is writable by you, so the helper has nothing to do."
+            ? String(localized: "Ask macOS puts Livery on the list under System Settings › Privacy & Security › App Management, or shows an approval dialog. Make sure the Livery switch there is on. The helper lives inside Livery, so this one switch covers both.")
+            : String(localized: "Every app on this Mac is writable by you, so the helper has nothing to do.")
     }
 }
 

@@ -70,8 +70,8 @@ struct InspectorView: View {
             SectionLabel("WHY IT BROKE")
             let flagSet = app.inspection?.flagSet ?? false
             let size = app.inspection?.rsrcSize ?? 0
-            DiagnosisRow(ok: flagSet, label: "Custom-icon flag", value: flagSet ? "set" : "cleared")
-            DiagnosisRow(ok: size > 0, label: "Icon resource fork", value: size > 0 ? bytes(size) : "missing, 0 bytes")
+            DiagnosisRow(ok: flagSet, label: "Custom-icon flag", value: flagSet ? String(localized: "set") : String(localized: "cleared"))
+            DiagnosisRow(ok: size > 0, label: "Icon resource fork", value: size > 0 ? bytes(size) : String(localized: "missing, 0 bytes"))
             Text(app.state.explanation)
                 .font(.system(size: 12))
                 .foregroundStyle(.secondary)
@@ -244,20 +244,20 @@ struct InspectorView: View {
 
     private func healthyDetail(_ app: AppItem) -> String {
         let size = bytes(app.inspection?.rsrcSize ?? 0)
-        guard app.installed else { return "Flag set, \(size) icon resource." }
+        guard app.installed else { return String(localized: "Flag set, \(size) icon resource.") }
         let live = IconFS.inspect(app.path, withHash: true)
         if let applied = app.entry?.appliedRsrcSHA256, let now = live.rsrcSHA256 {
             return applied == now
-                ? "Flag set, \(size) icon resource, matches the kept file."
-                : "Flag set, \(size) icon resource, but it is not the one Livery wrote. Repair to bring the kept icon back."
+                ? String(localized: "Flag set, \(size) icon resource, matches the kept file.")
+                : String(localized: "Flag set, \(size) icon resource, but it is not the one Livery wrote. Repair to bring the kept icon back.")
         }
-        return "Flag set, \(size) icon resource."
+        return String(localized: "Flag set, \(size) icon resource.")
     }
 }
 
 struct PreviewCard: View {
     let image: NSImage?
-    let caption: String
+    let caption: LocalizedStringKey
 
     var body: some View {
         VStack(spacing: 8) {
@@ -287,7 +287,7 @@ struct PreviewCard: View {
 
 struct DiagnosisRow: View {
     let ok: Bool
-    let label: String
+    let label: LocalizedStringKey
     let value: String
 
     var body: some View {
@@ -447,11 +447,11 @@ struct SuggestionTile: View {
         }
         .buttonStyle(.plain)
         .disabled(library.isBusy)
-        .help("Use this icon for \(app.name)" + (hit.author.isEmpty ? "" : " (by \(hit.author))"))
+        .help(hit.author.isEmpty ? String(localized: "Use this icon for \(app.name)") : String(localized: "Use this icon for \(app.name) (by \(hit.author))"))
     }
 
     private var caption: String {
-        if let downloads = hit.downloads, downloads > 0 { return "\(downloads) dl" }
+        if let downloads = hit.downloads, downloads > 0 { return String(localized: "\(downloads) dl") }
         return hit.author.isEmpty ? "macosicons.com" : hit.author
     }
 }

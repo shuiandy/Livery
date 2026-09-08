@@ -173,7 +173,7 @@ struct HitTile: View {
             }
             .frame(width: 84, height: 84)
             .task { await library.loadPreview(for: hit) }
-            Text(hit.appName ?? "Untitled")
+            Text(hit.appName ?? String(localized: "Untitled"))
                 .font(.system(size: 12, weight: .medium))
                 .lineLimit(1)
             Text(caption)
@@ -193,8 +193,8 @@ struct HitTile: View {
     private var caption: String {
         var parts: [String] = []
         if !hit.author.isEmpty { parts.append(hit.author) }
-        if let downloads = hit.downloads, downloads > 0 { parts.append("\(downloads) dl") }
-        if hit.icnsUrl == nil { parts.append("png only") }
+        if let downloads = hit.downloads, downloads > 0 { parts.append(String(localized: "\(downloads) dl")) }
+        if hit.icnsUrl == nil { parts.append(String(localized: "png only")) }
         return parts.joined(separator: " · ")
     }
 
@@ -274,7 +274,7 @@ struct AppPickerSheet: View {
                 .frame(width: 36, height: 36)
                 .task { await library.loadPreview(for: hit) }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Use “\(hit.appName ?? "this icon")” for which app?")
+                    Text("Use “\(hit.appName ?? String(localized: "this icon"))” for which app?")
                         .font(.headline)
                     Text(hit.author.isEmpty ? "icon catalog" : "by \(hit.author)")
                         .font(.system(size: 11.5))
@@ -282,7 +282,7 @@ struct AppPickerSheet: View {
                 }
                 Spacer()
                 Button("Other app…") {
-                    guard let target = library.pickApp(named: "Which app should get this icon?") else { return }
+                    guard let target = library.pickApp(named: String(localized: "Which app should get this icon?")) else { return }
                     Task { await library.apply(hit: hit, to: target) }
                 }
                 Button("Cancel") { dismiss() }

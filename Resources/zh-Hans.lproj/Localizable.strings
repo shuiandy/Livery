@@ -1,0 +1,245 @@
+/* Sidebar */
+"Library" = "资料库";
+"Discover" = "发现";
+"All apps" = "全部 App";
+"Custom icons" = "自定义图标";
+"Needs attention" = "需要处理";
+"Recently changed" = "最近更改";
+"Find icons" = "查找图标";
+"Watching" = "监视中";
+"Agent stopped" = "代理已停止";
+"Agent not installed" = "代理未安装";
+"Install" = "安装";
+"Start" = "启动";
+"Nothing logged yet" = "尚无日志";
+"Started %@" = "启动于 %@";
+"Without the agent, icons are only repaired while this window is open." = "没有代理时，只有这个窗口打开着才会修复图标。";
+"Agent last wrote an icon successfully" = "代理上次写入图标成功";
+"Agent was refused at %@" = "代理在 %@ 被拒绝写入";
+"Agent was refused an icon write" = "代理写入图标被拒绝";
+"Agent has not written an icon yet" = "代理尚未写入过图标";
+"Open System Settings…" = "打开系统设置…";
+
+/* Toolbar and window */
+"Layout" = "布局";
+"Grid or list" = "网格或列表";
+"Check now" = "立即检查";
+"Re-read every app (⌘R)" = "重新读取所有 App（⌘R）";
+"Other app…" = "其他 App…";
+"Pick an app that is not in an Applications folder (⌘N)" = "选择不在应用程序文件夹里的 App（⌘N）";
+"Inspector" = "检查器";
+"Show or hide the inspector" = "显示或隐藏检查器";
+"Search apps" = "搜索 App";
+"1 app" = "1 个 App";
+"%lld apps" = "%lld 个 App";
+"%@, %lld with custom icons" = "%1$@，%2$lld 个使用自定义图标";
+"Iconic catalog" = "Iconic 目录";
+"%@, 30,000 icons" = "%@，30,000 张图标";
+"Set up…" = "设置…";
+"Cancel" = "取消";
+"Livery could not finish" = "Livery 未能完成";
+"Open System Settings" = "打开系统设置";
+"OK" = "好";
+"%@ is owned by root" = "%@ 属于 root";
+"%lld apps are owned by root" = "%lld 个 App 属于 root";
+"The App Store or an installer left %@ owned by root, so nothing running as you can write into the bundle. Livery writes these through a small helper that runs as root. macOS asks for permission once; after that icons are written silently, including repairs after an app updates." = "App Store 或安装器把 %@ 留给了 root，以你的身份运行的任何进程都写不进这些 bundle。Livery 通过一个以 root 运行的小 helper 来写入。macOS 只会询问一次；之后图标都静默写入，包括 App 更新后的修复。";
+"Reading Applications…" = "正在读取应用程序…";
+"No apps found" = "没有找到 App";
+"Nothing in /Applications or ~/Applications. Pick an app from somewhere else." = "/Applications 和 ~/Applications 里什么都没有。从别处选一个 App。";
+
+/* Attention banner */
+"1 app needs attention" = "1 个 App 需要处理";
+"%lld apps need attention" = "%lld 个 App 需要处理";
+"Repair" = "修复";
+"Fix all" = "全部修复";
+"%@ shows a folder in Finder" = "%@ 在访达中显示为文件夹";
+"%@ fell back to its stock icon" = "%@ 变回了原厂图标";
+"%@ is no longer where it was" = "%@ 不在原来的位置了";
+" and " = "，";
+", " = "，";
+", and %lld more" = "，还有 %lld 个";
+"." = "。";
+" Repair writes the kept icons back." = "修复会把保存的图标写回去。";
+
+/* App state */
+"Stock icon" = "原厂图标";
+"Healthy" = "正常";
+"Folder in Finder" = "访达中显示为文件夹";
+"Stock icon is back" = "原厂图标回来了";
+"App not found" = "找不到 App";
+"Finder draws the app's own icon. Livery is not tracking this app." = "访达显示的是 App 自带的图标。Livery 没有追踪这个 App。";
+"Finder draws the kept icon." = "访达显示的是保存的图标。";
+"An update rewrote the bundle in place. The flag survived, the icon data did not, so Finder draws a folder." = "一次更新原地重写了 bundle。标志位还在，图标数据没了，所以访达画出一个文件夹。";
+"The bundle was replaced wholesale, which cleared the custom-icon flag. The app shows its stock icon." = "bundle 被整个替换，自定义图标标志位被清除。App 显示的是原厂图标。";
+"The app is not at its recorded path and Launch Services does not know it. The kept icon stays in the library." = "App 不在记录的路径上，启动服务也不认识它。保存的图标仍留在资料库里。";
+"Local file" = "本地文件";
+"Imported from Replacicon" = "从 Replacicon 导入";
+
+/* Confirmations */
+"Reset %@ to its stock icon?" = "把 %@ 重置为原厂图标？";
+"Stop tracking %@?" = "停止追踪 %@？";
+"Relaunch %@?" = "重新启动 %@？";
+"Restore stock icons for all %lld apps?" = "恢复全部 %lld 个 App 的原厂图标？";
+"The custom icon is removed from the bundle and Livery stops tracking %@. The icon file stays in the library folder." = "自定义图标会从 bundle 中移除，Livery 停止追踪 %@。图标文件仍保留在资料库文件夹里。";
+"%@ keeps whatever icon it has now, but Livery stops repairing it after updates." = "%@ 保留现在的图标，但 Livery 不再在更新后修复它。";
+"%@ is asked to quit and is opened again so the Dock picks up the new icon. Anything unsaved in it is up to the app to handle." = "会请求 %@ 退出并重新打开，让程序坞换上新图标。其中未保存的内容由该 App 自己处理。";
+"Every app goes back to the icon inside its own bundle and Livery stops tracking all of them. The icon files stay in the library folder, so the icons can be applied again later." = "每个 App 都会回到自己 bundle 内的图标，Livery 停止追踪全部。图标文件仍保留在资料库文件夹里，以后可以再次应用。";
+"Reset" = "重置";
+"Stop tracking" = "停止追踪";
+"Relaunch" = "重新启动";
+"Restore all" = "全部恢复";
+
+/* Helper status and errors */
+"Not installed" = "未安装";
+"Waiting for approval in System Settings" = "等待在系统设置中批准";
+"Enabled" = "已启用";
+"Unknown" = "未知";
+"Registered, not answering yet" = "已注册，尚未响应";
+"Enabled, last write succeeded" = "已启用，上次写入成功";
+"Enabled, but macOS refused its last write" = "已启用，但 macOS 拒绝了它上次的写入";
+"Enabled, no write attempted yet" = "已启用，尚未尝试写入";
+"The helper is registered but does not answer yet. Give it a moment, then try the icon again." = "helper 已注册但尚未响应。稍等片刻，再试一次图标。";
+"The helper could not be registered (%@). Reinstall Livery.app and try again." = "无法注册 helper（%@）。重新安装 Livery.app 后再试。";
+"This icon has no downloadable file." = "这张图标没有可下载的文件。";
+"Choose an .icns or .png for %@" = "为 %@ 选择一个 .icns 或 .png";
+"%@ is %@, not %@." = "%1$@ 是 %2$@，不是 %3$@。";
+"%@ did not quit (it may have unsaved work). Quit it yourself, then open it again." = "%@ 没有退出（可能有未保存的内容）。请手动退出后再重新打开。";
+"The command line tool is not installed at %@. Reinstall Livery, or run ./install.sh in the project." = "命令行工具没有安装在 %@。重新安装 Livery，或在项目里运行 ./install.sh。";
+"Choose the app that should get a custom icon" = "选择要换自定义图标的 App";
+"Where is %@ now?" = "%@ 现在在哪里？";
+"Which app should get this icon?" = "这张图标要用在哪个 App 上？";
+
+/* Settings */
+"Icon catalog" = "图标目录";
+"Search icons on" = "搜索图标来源";
+"Iconic catalog (no key)" = "Iconic 目录（无需 key）";
+"macosicons.com (API key)" = "macosicons.com（需要 API key）";
+"Both serve the same 30,000-icon library. Iconic needs no key. macosicons.com needs a free key and allows 50 calls a month on the free plan, 1,000 with macOSicons+." = "两者提供同一个 30,000 张图标的图库。Iconic 不需要 key。macosicons.com 需要一个免费 key，免费计划每月 50 次调用，macOSicons+ 为 1,000 次。";
+"Look up icons automatically when an app is selected" = "选中 App 时自动查找图标";
+"A lookup sends the app's name, and nothing else, to the catalog above. Switched off, nothing is sent until you click Look up icons or Search more." = "查找只会把 App 的名字发给上面的目录，别的什么都不发。关闭后，只有点击“查找图标”或“搜索更多”才会发送。";
+"macosicons.com API key" = "macosicons.com API key";
+"API key" = "API key";
+"A key is stored" = "已保存一个 key";
+"Paste your key" = "粘贴你的 key";
+"Save" = "保存";
+"Stored in %@. Free keys at macosicons.com/developers." = "保存在 %@。免费 key 见 macosicons.com/developers。";
+"Saved." = "已保存。";
+"Privileged helper" = "特权 helper";
+"Status" = "状态";
+"Remove" = "移除";
+"Writes icons into bundles owned by root, which is how the App Store and installers leave them. Needs two one-time approvals; Set up shows where each stands and walks through them. After that every write is silent, including repairs after an app updates." = "把图标写入 root 所有的 bundle，App Store 和安装器装的 App 就是这样。需要两次一次性授权；“设置…”会显示每一步的状态并引导完成。之后所有写入都静默进行，包括 App 更新后的修复。";
+"Background agent" = "后台代理";
+"Watch Applications folders and repair icons automatically" = "监视应用程序文件夹并自动修复图标";
+"Runs %@ watch%@. Log: %@." = "正在运行 %1$@ watch%2$@。日志：%3$@。";
+"Installs the launch agent com.shuiandy.livery that runs the command line tool from %@." = "安装 launch agent com.shuiandy.livery，它会运行位于 %@ 的命令行工具。";
+"After a repair" = "修复之后";
+"Restart the Dock so it picks up the new icon" = "重新启动程序坞以显示新图标";
+
+/* Helper setup */
+"Set up the helper" = "设置 helper";
+"Apps installed by the App Store or an installer belong to root. Livery writes their icons through a small helper that macOS asks you to approve twice, once each. After that every write is silent, including repairs after an app updates." = "由 App Store 或安装器安装的 App 属于 root。Livery 通过一个小 helper 写入它们的图标，macOS 会请你批准两次，各一次。之后所有写入都静默进行，包括 App 更新后的修复。";
+"Allow Livery in the background" = "允许 Livery 在后台运行";
+"System Settings › General › Login Items & Extensions › Allow in the Background. Turn on Livery." = "系统设置 › 通用 › 登录项与扩展 › 允许在后台运行。打开 Livery。";
+"Register helper" = "注册 helper";
+"Open Login Items" = "打开登录项";
+"Let the helper manage apps" = "允许 helper 管理 App";
+"Ask macOS" = "询问 macOS";
+"Open App Management" = "打开 App 管理";
+"Check again" = "再次检查";
+"Done" = "完成";
+"Approved" = "已批准";
+"Waiting for the switch" = "等待打开开关";
+"Not registered yet" = "尚未注册";
+"Not needed: no app here is owned by root" = "不需要：这里没有 root 所有的 App";
+"After step 1" = "先完成第 1 步";
+"Helper starting…" = "helper 启动中…";
+"Checking…" = "检查中…";
+"Ask macOS puts Livery on the list under System Settings › Privacy & Security › App Management, or shows an approval dialog. Make sure the Livery switch there is on. The helper lives inside Livery, so this one switch covers both." = "“询问 macOS”会把 Livery 加进系统设置 › 隐私与安全性 › App 管理的列表，或弹出批准对话框。确认那里 Livery 的开关是打开的。helper 就在 Livery 里面，所以这一个开关同时覆盖两者。";
+"Every app on this Mac is writable by you, so the helper has nothing to do." = "这台 Mac 上的每个 App 你都有权写入，helper 无事可做。";
+"Step %lld, %@, %@" = "第 %1$lld 步，%2$@，%3$@";
+
+/* Inspector */
+"No app selected" = "未选择 App";
+"Pick an app to see how Finder draws it right now." = "选择一个 App，看看访达此刻是怎么显示它的。";
+"In Finder now" = "访达当前显示";
+"Kept by Livery" = "Livery 保存的";
+"WHY IT BROKE" = "问题原因";
+"Custom-icon flag" = "自定义图标标志位";
+"set" = "已设置";
+"cleared" = "已清除";
+"Icon resource fork" = "图标资源分支";
+"missing, 0 bytes" = "缺失，0 字节";
+"Repair icon" = "修复图标";
+"Reset to stock icon" = "重置为原厂图标";
+"Locate app…" = "定位 App…";
+"%@ is running" = "%@ 正在运行";
+"The Dock keeps the icon it loaded at launch, even after the Dock restarts. Relaunch %@ to update its tile." = "程序坞会一直用启动时加载的图标，即使重启程序坞也一样。重新启动 %@ 才能更新它的图标。";
+"Relaunch %@" = "重新启动 %@";
+"Source" = "来源";
+"Icon" = "图标";
+"Applied" = "应用于";
+"Flag set, %@ icon resource." = "标志位已设置，图标资源 %@。";
+"Flag set, %@ icon resource, matches the kept file." = "标志位已设置，图标资源 %@，与保存的文件一致。";
+"Flag set, %@ icon resource, but it is not the one Livery wrote. Repair to bring the kept icon back." = "标志位已设置，图标资源 %@，但不是 Livery 写入的那份。修复可以换回保存的图标。";
+"OTHER ICONS FOR THIS APP" = "这个 App 的其他图标";
+"ICONS FOR THIS APP" = "这个 App 的图标";
+"Search more…" = "搜索更多…";
+"Choose file…" = "选择文件…";
+"Looking up “%@”…" = "正在查找“%@”…";
+"macosicons.com's monthly API quota is used up (50 calls on the free key). The Iconic catalog serves the same icons without a key." = "macosicons.com 本月的 API 配额已用完（免费 key 每月 50 次）。Iconic 目录不需要 key 就能提供同样的图标。";
+"The icon catalog is rate limiting right now. Cached icons still show; new lookups pause for a few minutes." = "图标目录正在限流。已缓存的图标仍会显示；新的查找暂停几分钟。";
+"Use Iconic catalog" = "改用 Iconic 目录";
+"Try again" = "重试";
+"macosicons.com needs an API key. The Iconic catalog serves the same icons without one." = "macosicons.com 需要 API key。Iconic 目录不需要 key 就能提供同样的图标。";
+"Settings…" = "设置…";
+"Automatic lookups are off. Looking up sends “%@” to %@." = "自动查找已关闭。查找会把“%1$@”发送给 %2$@。";
+"Look up icons" = "查找图标";
+"Nothing in the catalog for “%@”." = "目录里没有“%@”的图标。";
+"Use this icon for %@" = "把这张图标用于 %@";
+"Use this icon for %@ (by %@)" = "把这张图标用于 %1$@（作者 %2$@）";
+
+/* Grid, list and context menu */
+"Shows this app in the inspector" = "在检查器中显示这个 App";
+"Choose another icon…" = "换一张图标…";
+"Choose an icon…" = "选择图标…";
+"Reveal in Finder" = "在访达中显示";
+"Open icon page" = "打开图标页面";
+"Stop tracking…" = "停止追踪…";
+"Reset to stock icon…" = "重置为原厂图标…";
+"App" = "App";
+"Stock" = "原厂";
+
+/* Discover */
+"Search the icon catalog" = "搜索图标目录";
+"Search" = "搜索";
+"Search failed" = "搜索失败";
+"No icons for “%@”" = "没有“%@”的图标";
+"Try the app's short name or a different spelling." = "试试 App 的简称或别的拼写。";
+"Type an app name. Every result can be used for any app you track." = "输入 App 名称。每个结果都可以用在你追踪的任何 App 上。";
+"1 icon" = "1 张图标";
+"%lld icons" = "%lld 张图标";
+"Load more" = "加载更多";
+"macosicons.com needs an API key" = "macosicons.com 需要 API key";
+"The Iconic catalog serves the same icons without a key; switch to it in Settings. Or get a free key at macosicons.com/developers (50 calls a month), paste it here, and it is stored in ~/.config/livery/api-key." = "Iconic 目录不需要 key 就能提供同样的图标，可在设置里切换。或者到 macosicons.com/developers 领一个免费 key（每月 50 次调用），粘贴到这里，它会保存在 ~/.config/livery/api-key。";
+"Open macosicons.com/developers" = "打开 macosicons.com/developers";
+"Untitled" = "未命名";
+"%lld dl" = "%lld 次下载";
+"png only" = "仅 PNG";
+"Use for %@" = "用于 %@";
+"Use for…" = "用于…";
+"Choose an icon for %@" = "为 %@ 选择图标";
+"Use “%@” for which app?" = "把“%@”用在哪个 App 上？";
+"this icon" = "这张图标";
+"icon catalog" = "图标目录";
+"by %@" = "作者 %@";
+"Filter apps" = "筛选 App";
+"custom icon" = "自定义图标";
+
+/* Menus */
+"Add App…" = "添加 App…";
+"Icons" = "图标";
+"Check Now" = "立即检查";
+"Fix All" = "全部修复";
+"Restore All Stock Icons…" = "恢复全部原厂图标…";
+"Restart Dock" = "重新启动程序坞";
+"Reveal Library in Finder" = "在访达中显示资料库";

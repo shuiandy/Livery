@@ -43,6 +43,7 @@ mkdir -p "$OUT/Contents/MacOS" "$OUT/Contents/Resources" "$OUT/Contents/Library/
 cp .build/release/LiveryApp "$OUT/Contents/MacOS/$APP_NAME"
 cp .build/release/LiveryHelper "$OUT/Contents/MacOS/LiveryHelper"
 cp Resources/AppIcon.icns "$OUT/Contents/Resources/AppIcon.icns"
+cp -R Resources/*.lproj "$OUT/Contents/Resources/"
 # SMAppService daemon: launchd runs it as root from inside this bundle, on demand when the mach service is dialled.
 cat > "$OUT/Contents/Library/LaunchDaemons/$HELPER.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>

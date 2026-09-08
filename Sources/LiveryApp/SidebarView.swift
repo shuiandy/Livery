@@ -112,9 +112,9 @@ struct WatcherCard: View {
     private var agentRunning: Bool { library.agent.loaded && library.agent.pid != nil }
 
     private var agentTitle: String {
-        if agentRunning { return "Watching" }
-        if library.agent.installed { return "Agent stopped" }
-        return "Agent not installed"
+        if agentRunning { return String(localized: "Watching") }
+        if library.agent.installed { return String(localized: "Agent stopped") }
+        return String(localized: "Agent not installed")
     }
 
     private var agentColor: Color {
@@ -124,10 +124,10 @@ struct WatcherCard: View {
     }
 
     private var startedText: String {
-        guard let started = library.agentStarted else { return "Nothing logged yet" }
+        guard let started = library.agentStarted else { return String(localized: "Nothing logged yet") }
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .abbreviated
-        return "Started " + formatter.localizedString(for: started, relativeTo: Date())
+        return String(localized: "Started \(formatter.localizedString(for: started, relativeTo: Date()))")
     }
 
     private var permissionSymbol: String {
@@ -150,13 +150,13 @@ struct WatcherCard: View {
     /// and the log only ever shows what happened to the agent.
     private var permissionText: String {
         switch library.permission {
-        case .allowed: return "Agent last wrote an icon successfully"
+        case .allowed: return String(localized: "Agent last wrote an icon successfully")
         case .denied:
             if let when = library.lastRefusal {
-                return "Agent was refused at " + when.formatted(date: .omitted, time: .shortened)
+                return String(localized: "Agent was refused at \(when.formatted(date: .omitted, time: .shortened))")
             }
-            return "Agent was refused an icon write"
-        case .unknown: return "Agent has not written an icon yet"
+            return String(localized: "Agent was refused an icon write")
+        case .unknown: return String(localized: "Agent has not written an icon yet")
         }
     }
 }

@@ -98,16 +98,16 @@ struct SettingsView: View {
     private var agentDescription: String {
         if library.agent.installed {
             let pid = library.agent.pid.map { " (pid \($0))" } ?? ""
-            return "Runs \(tildePath(library.agent.program ?? Library.cliBinary)) watch\(pid). Log: \(tildePath(Paths.logFile.path))."
+            return String(localized: "Runs \(tildePath(library.agent.program ?? Library.cliBinary)) watch\(pid). Log: \(tildePath(Paths.logFile.path)).")
         }
-        return "Installs the launch agent com.shuiandy.livery that runs the command line tool from \(tildePath(Library.cliBinary))."
+        return String(localized: "Installs the launch agent com.shuiandy.livery that runs the command line tool from \(tildePath(Library.cliBinary)).")
     }
 
     private func saveKey() {
         do {
             try MacOSIcons.saveKey(keyDraft.trimmingCharacters(in: .whitespacesAndNewlines))
             keyDraft = ""
-            keyStatus = "Saved."
+            keyStatus = String(localized: "Saved.")
         } catch {
             keyStatus = "\(error)"
         }

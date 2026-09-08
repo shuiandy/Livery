@@ -6,6 +6,8 @@
 
 <p align="center">Custom macOS app icons that survive app updates.</p>
 
+<p align="center">English · <a href="README.zh-Hans.md">简体中文</a></p>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="Design/window-dark.png">
   <img src="Design/window-light.png" alt="Livery's main window: the app grid, one app flagged for attention, and the inspector explaining why it shows a folder in Finder">
@@ -13,7 +15,8 @@
 
 Livery is a SwiftUI app, a command line tool and a launch agent over one core, with no dependencies
 outside the macOS SDK. Give an app an icon once; Livery keeps a copy, notices when an update takes
-it away, and puts it back.
+it away, and puts it back. The app speaks English and Simplified Chinese, following the system
+language.
 
 ## Why
 

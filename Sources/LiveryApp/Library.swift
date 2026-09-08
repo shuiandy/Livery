@@ -9,11 +9,11 @@ enum SidebarSection: String, Hashable, CaseIterable {
 
     var title: String {
         switch self {
-        case .all: return "All apps"
-        case .custom: return "Custom icons"
-        case .attention: return "Needs attention"
-        case .recent: return "Recently changed"
-        case .discover: return "Find icons"
+        case .all: return String(localized: "All apps")
+        case .custom: return String(localized: "Custom icons")
+        case .attention: return String(localized: "Needs attention")
+        case .recent: return String(localized: "Recently changed")
+        case .discover: return String(localized: "Find icons")
         }
     }
 }
@@ -35,21 +35,21 @@ enum AppState {
 
     var title: String {
         switch self {
-        case .untracked: return "Stock icon"
-        case .healthy: return "Healthy"
-        case .folderIcon: return "Folder in Finder"
-        case .reverted: return "Stock icon is back"
-        case .missing: return "App not found"
+        case .untracked: return String(localized: "Stock icon")
+        case .healthy: return String(localized: "Healthy")
+        case .folderIcon: return String(localized: "Folder in Finder")
+        case .reverted: return String(localized: "Stock icon is back")
+        case .missing: return String(localized: "App not found")
         }
     }
 
     var explanation: String {
         switch self {
-        case .untracked: return "Finder draws the app's own icon. Livery is not tracking this app."
-        case .healthy: return "Finder draws the kept icon."
-        case .folderIcon: return "An update rewrote the bundle in place. The flag survived, the icon data did not, so Finder draws a folder."
-        case .reverted: return "The bundle was replaced wholesale, which cleared the custom-icon flag. The app shows its stock icon."
-        case .missing: return "The app is not at its recorded path and Launch Services does not know it. The kept icon stays in the library."
+        case .untracked: return String(localized: "Finder draws the app's own icon. Livery is not tracking this app.")
+        case .healthy: return String(localized: "Finder draws the kept icon.")
+        case .folderIcon: return String(localized: "An update rewrote the bundle in place. The flag survived, the icon data did not, so Finder draws a folder.")
+        case .reverted: return String(localized: "The bundle was replaced wholesale, which cleared the custom-icon flag. The app shows its stock icon.")
+        case .missing: return String(localized: "The app is not at its recorded path and Launch Services does not know it. The kept icon stays in the library.")
         }
     }
 }
@@ -83,13 +83,13 @@ struct AppItem: Identifiable {
 
     var sourceDescription: String {
         guard let entry else { return "" }
-        guard let source = entry.source else { return "Local file" }
-        if source == "replacicon" || source.contains("replacicon.app") { return "Imported from Replacicon" }
+        guard let source = entry.source else { return String(localized: "Local file") }
+        if source == "replacicon" || source.contains("replacicon.app") { return String(localized: "Imported from Replacicon") }
         if source.contains("macosicons.com") {
             let author = entry.credit ?? ""
             return author.isEmpty || author == "macosicons.com" ? "macosicons.com" : "macosicons.com · \(author)"
         }
-        if source.hasPrefix("/") { return "Local file" }
+        if source.hasPrefix("/") { return String(localized: "Local file") }
         return source
     }
 
@@ -138,32 +138,32 @@ enum PendingConfirmation: Identifiable {
 
     var title: String {
         switch self {
-        case .reset(let app): return "Reset \(app.name) to its stock icon?"
-        case .stopTracking(let app): return "Stop tracking \(app.name)?"
-        case .relaunch(let app): return "Relaunch \(app.name)?"
-        case .resetAll(let count): return "Restore stock icons for all \(count) apps?"
+        case .reset(let app): return String(localized: "Reset \(app.name) to its stock icon?")
+        case .stopTracking(let app): return String(localized: "Stop tracking \(app.name)?")
+        case .relaunch(let app): return String(localized: "Relaunch \(app.name)?")
+        case .resetAll(let count): return String(localized: "Restore stock icons for all \(count) apps?")
         }
     }
 
     var message: String {
         switch self {
         case .reset(let app):
-            return "The custom icon is removed from the bundle and Livery stops tracking \(app.name). The icon file stays in the library folder."
+            return String(localized: "The custom icon is removed from the bundle and Livery stops tracking \(app.name). The icon file stays in the library folder.")
         case .stopTracking(let app):
-            return "\(app.name) keeps whatever icon it has now, but Livery stops repairing it after updates."
+            return String(localized: "\(app.name) keeps whatever icon it has now, but Livery stops repairing it after updates.")
         case .relaunch(let app):
-            return "\(app.name) is asked to quit and is opened again so the Dock picks up the new icon. Anything unsaved in it is up to the app to handle."
+            return String(localized: "\(app.name) is asked to quit and is opened again so the Dock picks up the new icon. Anything unsaved in it is up to the app to handle.")
         case .resetAll:
-            return "Every app goes back to the icon inside its own bundle and Livery stops tracking all of them. The icon files stay in the library folder, so the icons can be applied again later."
+            return String(localized: "Every app goes back to the icon inside its own bundle and Livery stops tracking all of them. The icon files stay in the library folder, so the icons can be applied again later.")
         }
     }
 
     var actionTitle: String {
         switch self {
-        case .reset: return "Reset"
-        case .stopTracking: return "Stop tracking"
-        case .relaunch: return "Relaunch"
-        case .resetAll: return "Restore all"
+        case .reset: return String(localized: "Reset")
+        case .stopTracking: return String(localized: "Stop tracking")
+        case .relaunch: return String(localized: "Relaunch")
+        case .resetAll: return String(localized: "Restore all")
         }
     }
 
@@ -495,11 +495,11 @@ final class Library {
         case .notInstalled, .unknown: return helperState.title
         case .requiresApproval: return helperState.title
         case .enabled:
-            guard helperReachable else { return "Registered, not answering yet" }
+            guard helperReachable else { return String(localized: "Registered, not answering yet") }
             switch helperGrant {
-            case .allowed: return "Enabled, last write succeeded"
-            case .denied: return "Enabled, but macOS refused its last write"
-            case .unknown: return "Enabled, no write attempted yet"
+            case .allowed: return String(localized: "Enabled, last write succeeded")
+            case .denied: return String(localized: "Enabled, but macOS refused its last write")
+            case .unknown: return String(localized: "Enabled, no write attempted yet")
             }
         }
     }
@@ -544,7 +544,7 @@ final class Library {
             HelperClient.forget()
             let alive = await Task.detached { HelperClient.version(timeout: 8) != nil }.value
             guard alive else {
-                errorMessage = "The helper is registered but does not answer yet. Give it a moment, then try the icon again."
+                errorMessage = String(localized: "The helper is registered but does not answer yet. Give it a moment, then try the icon again.")
                 return
             }
             helperReachable = true
@@ -561,7 +561,7 @@ final class Library {
             HelperManager.openApprovalSettings()
             helperSetupPresented = true
         case .notInstalled, .unknown:
-            errorMessage = "The helper could not be registered (\(state.title)). Reinstall Livery.app and try again."
+            errorMessage = String(localized: "The helper could not be registered (\(state.title)). Reinstall Livery.app and try again.")
         }
     }
 
@@ -610,7 +610,7 @@ final class Library {
 
     func apply(hit: IconHit, to app: AppRef) async {
         guard let urlString = hit.icnsUrl ?? hit.lowResPngUrl else {
-            errorMessage = "This icon has no downloadable file."
+            errorMessage = String(localized: "This icon has no downloadable file.")
             return
         }
         isBusy = true
@@ -808,7 +808,7 @@ final class Library {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [.icns, .png]
         panel.canChooseDirectories = false
-        panel.message = "Choose an .icns or .png for \(target.name)"
+        panel.message = String(localized: "Choose an .icns or .png for \(target.name)")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         Task {
             do {
@@ -821,7 +821,7 @@ final class Library {
     }
 
     func addApp() {
-        guard let ref = pickApp(named: "Choose the app that should get a custom icon") else { return }
+        guard let ref = pickApp(named: String(localized: "Choose the app that should get a custom icon")) else { return }
         iconPickerTarget = ref
     }
 
@@ -886,9 +886,9 @@ final class Library {
     }
 
     func locate(_ app: AppItem) {
-        guard let ref = pickApp(named: "Where is \(app.name) now?") else { return }
+        guard let ref = pickApp(named: String(localized: "Where is \(app.name) now?")) else { return }
         guard ref.bundleID == app.id else {
-            errorMessage = "\(ref.name) is \(ref.bundleID), not \(app.id)."
+            errorMessage = String(localized: "\(ref.name) is \(ref.bundleID), not \(app.id).")
             return
         }
         Task {
@@ -928,7 +928,7 @@ final class Library {
                 try? await Task.sleep(for: .milliseconds(200))
             }
             guard running.isTerminated else {
-                errorMessage = "\(app.name) did not quit (it may have unsaved work). Quit it yourself, then open it again."
+                errorMessage = String(localized: "\(app.name) did not quit (it may have unsaved work). Quit it yourself, then open it again.")
                 return
             }
             try? await Task.sleep(for: .milliseconds(300))
@@ -945,7 +945,7 @@ final class Library {
     /// `launchctl` is a synchronous round trip that has been seen to take seconds, so it stays off the main actor.
     func installAgent() {
         guard FileManager.default.isExecutableFile(atPath: Library.cliBinary) else {
-            errorMessage = "The command line tool is not installed at \(Library.cliBinary). Reinstall Livery, or run ./install.sh in the project."
+            errorMessage = String(localized: "The command line tool is not installed at \(Library.cliBinary). Reinstall Livery, or run ./install.sh in the project.")
             return
         }
         Task {

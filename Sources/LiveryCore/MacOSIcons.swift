@@ -160,8 +160,8 @@ public enum IconSource: String, CaseIterable {
 
     public var title: String {
         switch self {
-        case .iconic: return "Iconic catalog (no key)"
-        case .macosicons: return "macosicons.com (API key)"
+        case .iconic: return String(localized: "Iconic catalog (no key)")
+        case .macosicons: return String(localized: "macosicons.com (API key)")
         }
     }
 

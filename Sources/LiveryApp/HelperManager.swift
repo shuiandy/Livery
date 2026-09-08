@@ -10,10 +10,10 @@ enum HelperManager {
 
         var title: String {
             switch self {
-            case .notInstalled: return "Not installed"
-            case .requiresApproval: return "Waiting for approval in System Settings"
-            case .enabled: return "Enabled"
-            case .unknown: return "Unknown"
+            case .notInstalled: return String(localized: "Not installed")
+            case .requiresApproval: return String(localized: "Waiting for approval in System Settings")
+            case .enabled: return String(localized: "Enabled")
+            case .unknown: return String(localized: "Unknown")
             }
         }
     }
