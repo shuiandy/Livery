@@ -1,0 +1,7 @@
+.build/
+*.xcodeproj
+.swiftpm/
+.api-key
+build/
+.DS_Store
+Design/canvas/
