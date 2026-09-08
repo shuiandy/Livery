@@ -30,14 +30,26 @@ Livery 给应用程序文件夹里的任何 app 换一张图标。可以从约 3
 Livery 列出 `/Applications` 和 `~/Applications` 下的全部 app，含一层厂商目录，所以 Setapp 和 Utilities 也在内。
 它由一个 SwiftUI app、一个命令行工具和一个 launch agent 组成，共用同一个核心，除 macOS SDK 外没有任何依赖。
 
-## 环境要求
+## 安装
 
-- macOS 15 或更高。
-- Xcode 16 或更高，需要 Swift 6 工具链。
-- 登录钥匙串里有一张 Apple Development 证书。在 Xcode 的 Settings > Accounts 里用任意 Apple ID 登录后 Xcode 会自动生成，免费账号就够。
-  安装脚本用它签名，下面提到的权限授权才能在重新编译后继续有效。
+需要 macOS 15 或更高。
 
-## 编译与安装
+### 用磁盘映像安装
+
+从 [Releases](https://github.com/shuiandy/Livery/releases) 下载 `Livery-<版本>.dmg`，打开后把 Livery 拖进 Applications。
+映像和 app 都有签名，但没有公证：公证需要付费 Apple Developer Program 里的 Developer ID 证书，这个项目没有。
+所以第一次启动会被 macOS 拒绝。打开系统设置 > 隐私与安全性，往下找到关于 Livery 的提示，点"仍要打开"并确认。只会问这一次。
+
+命令行工具就在 bundle 里，位于 `Livery.app/Contents/Helpers/livery`，后台代理直接从那里运行它。想在终端里用，链接到 `PATH` 上：
+
+```bash
+ln -s /Applications/Livery.app/Contents/Helpers/livery ~/.local/bin/livery
+```
+
+### 从源码编译
+
+需要 Xcode 16 或更高（Swift 6 工具链），以及登录钥匙串里的一张 Apple Development 证书。
+在 Xcode 的 Settings > Accounts 里用任意 Apple ID 登录后 Xcode 会自动生成，免费账号就够。脚本用它签名，下面提到的权限授权才能在重新编译后继续有效。
 
 ```bash
 git clone https://github.com/shuiandy/Livery.git
@@ -45,18 +57,15 @@ cd Livery
 ./install-app.sh
 ```
 
-`install-app.sh` 以 release 模式编译，把 helper 打进 `Livery.app`，用你的证书签名，把命令行工具装到 `~/.local/bin/livery`，
+`install-app.sh` 以 release 模式编译，把 helper 和命令行工具打进 `Livery.app`，用你的证书签名，把命令行工具装到 `~/.local/bin/livery`，
 然后通过一个新目录替换 `~/Applications/Livery.app` 并重新启动。验证不通过或启动失败的构建不会动已安装的版本。
-单独运行 `./install.sh` 只安装命令行工具，agent 已安装的话会一并重载。
+单独运行 `./install.sh` 只安装命令行工具，agent 已安装的话会一并重载。`./release.sh` 构建同一个 bundle 并打成上面那种磁盘映像。
 
-没有证书时两个脚本都会停下。`LIVERY_ALLOW_ADHOC=1` 可以改用 ad-hoc 签名，代价是每次重新编译在 macOS 眼里都是一个新身份，
+没有证书时脚本会停下。`LIVERY_ALLOW_ADHOC=1` 可以改用 ad-hoc 签名，代价是每次重新编译在 macOS 眼里都是一个新身份，
 所有授权都要重新给，而且特权 helper 因为没有可信任的 team 而完全不工作。
 
-没有可下载的构建。把 bundle 交给另一台 Mac 需要 Developer ID 证书和公证，二者都要付费的 Apple Developer Program，
-否则 Gatekeeper 会拒绝下载来的副本。从源码编译只要一分钟。
-
 绝对不要用 `cp` 原地覆盖正在运行的 Mach-O：内核在 vnode 上缓存着旧的代码签名哈希，之后每次执行都会被 `OS_REASON_CODESIGNING` 杀掉。
-两个脚本都是通过新 inode 替换二进制，原因就在这里。
+脚本都是通过新 inode 替换二进制，原因就在这里。
 
 ## 使用 app
 
@@ -91,8 +100,9 @@ livery key <KEY>                         # 可选：macosicons.com 的 key，供
 ## 权限
 
 往别的 app 的 bundle 里写 `Icon\r` 受 TCC 的 App Management（`kTCCServiceSystemPolicyAppBundles`）管制。
-交互式 shell 从终端 app 继承授权；launch agent 和 app 各自需要一份。app 第一次修复图标时会自己弹出请求。
-agent 要在系统设置 > 隐私与安全性 > App 管理里加一次 `~/.local/bin/livery`，否则每次修复都会在日志里留下 "NSWorkspace refused"。
+交互式 shell 从终端 app 继承授权；app 第一次修复图标时会自己弹出请求。用磁盘映像安装的话，agent 运行的是 bundle 里的那份工具，
+macOS 会把它归到 Livery 名下，所以 app 自己的那一行应该就够。从源码编译的 agent 运行的是 `~/.local/bin/livery`，需要单独一行：
+在系统设置 > 隐私与安全性 > App 管理里加一次，否则每次修复都会在日志里留下 "NSWorkspace refused"。
 
 App Store 和 pkg 安装的 app 属主是 `root:wheel`，以你的身份运行的任何进程都写不进去。Livery 通过 `LiveryHelper` 写这些 bundle，
 它是 app bundle 内用 `SMAppService` 注册的 LaunchDaemon。它只暴露两个操作：往 bundle 写一个图标，或删掉一个；
@@ -164,7 +174,7 @@ Livery 会测量每个入库图标的不透明包围盒。覆盖画布超过 90%
 1. Settings > Background agent 关掉，或运行 `livery agent uninstall`。
 2. Settings > Privileged helper > Remove，或 `open ~/Applications/Livery.app --args --remove-helper`。
 3. 想让所有 app 回到自己的图标，运行 `livery reset --all`。
-4. 删除 `~/Applications/Livery.app`、`~/.local/bin/livery`、`~/Library/Application Support/Livery`、
+4. 删除应用程序文件夹里的 `Livery.app`、装过或链接过的 `~/.local/bin/livery`、`~/Library/Application Support/Livery`、
    `~/Library/Caches/Livery`、`~/Library/Logs/livery.log` 和 `~/.config/livery`。
 
 Livery 在登录项和 App 管理里留下的行可以在系统设置里手动删掉。
@@ -183,7 +193,7 @@ identifier 分别是 `com.shuiandy.Livery`（app）、`com.shuiandy.Livery.helpe
 
 ## 已知限制
 
-- 没有可下载的构建，因为没有 Developer ID 证书。请从源码编译。
+- 磁盘映像用 Apple Development 证书签名，没有公证，所以第一次启动会被 macOS 拒绝，要在隐私与安全性里手动允许。
 - 重置只能回到原厂图标，无法撤销到它之前用过的那张自定义图标。
 - 下载的私有网络检查发生在查询时。查询与连接之间记录发生变化是客户端看不到的；目录主机是固定的。
 

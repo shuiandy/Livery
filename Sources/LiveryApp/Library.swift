@@ -224,7 +224,13 @@ final class Library {
     @ObservationIgnored private var timer: Timer?
 
     static let settingsURL = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_AppBundles")!
-    nonisolated static let cliBinary = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".local/bin/livery").path
+    /// The command line tool the background agent runs: the copy install.sh put in ~/.local/bin when there is one,
+    /// otherwise the copy inside this bundle, so an app installed from the disk image can run the agent too.
+    nonisolated static var cliBinary: String {
+        let installed = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".local/bin/livery").path
+        if FileManager.default.isExecutableFile(atPath: installed) { return installed }
+        return Bundle.main.bundleURL.appendingPathComponent("Contents/Helpers/livery").path
+    }
     nonisolated static let applicationRoots = ["/Applications", NSHomeDirectory() + "/Applications"]
 
     init() {

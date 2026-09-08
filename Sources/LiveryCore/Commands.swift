@@ -2,7 +2,7 @@ import AppKit
 import Foundation
 
 public enum Version {
-    public static let string = "0.3.0"
+    public static let string = "0.4.0"
 }
 
 public struct CheckReport {

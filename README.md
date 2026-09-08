@@ -40,15 +40,31 @@ Livery lists every app in `/Applications` and `~/Applications`, one vendor folde
 and Utilities are included. It is a SwiftUI app, a command line tool and a launch agent over one
 core, with no dependencies outside the macOS SDK.
 
-## Requirements
+## Install
 
-- macOS 15 or later.
-- Xcode 16 or later, for the Swift 6 toolchain.
-- An Apple Development certificate in your login keychain. Xcode creates one when you sign in
-  with any Apple ID under Settings > Accounts; a free account is enough. The install scripts sign
-  with it so the permissions below survive rebuilds.
+Livery needs macOS 15 or later.
 
-## Build and install
+### From the disk image
+
+Download `Livery-<version>.dmg` from [Releases](https://github.com/shuiandy/Livery/releases),
+open it and drag Livery to Applications. The image and the app are signed, but not notarized:
+notarization needs a Developer ID certificate from the paid Apple Developer Program, which this
+project does not have. So macOS refuses the first launch. Open System Settings > Privacy &
+Security, scroll down to the notice about Livery, click *Open Anyway* and confirm. It asks once.
+
+The command line tool ships inside the bundle at `Livery.app/Contents/Helpers/livery`, and the
+background agent runs it from there. To use it from a shell, link it onto your `PATH`:
+
+```bash
+ln -s /Applications/Livery.app/Contents/Helpers/livery ~/.local/bin/livery
+```
+
+### From source
+
+You need Xcode 16 or later, for the Swift 6 toolchain, and an Apple Development certificate in
+your login keychain. Xcode creates one when you sign in with any Apple ID under Settings >
+Accounts; a free account is enough. The scripts sign with it so the permissions below survive
+rebuilds.
 
 ```bash
 git clone https://github.com/shuiandy/Livery.git
@@ -56,22 +72,19 @@ cd Livery
 ./install-app.sh
 ```
 
-`install-app.sh` builds in release, assembles `Livery.app` with the helper inside, signs
-everything with your certificate, installs the command line tool to `~/.local/bin/livery`, and
-replaces `~/Applications/Livery.app` through a fresh directory before relaunching it. A build that
-does not verify or does not start leaves the previous install in place. `./install.sh` on its own
-installs only the command line tool and reloads the agent if it is installed.
+`install-app.sh` builds in release, assembles `Livery.app` with the helper and the command line
+tool inside, signs everything with your certificate, installs the command line tool to
+`~/.local/bin/livery`, and replaces `~/Applications/Livery.app` through a fresh directory before
+relaunching it. A build that does not verify or does not start leaves the previous install in
+place. `./install.sh` on its own installs only the command line tool and reloads the agent if it
+is installed. `./release.sh` builds the same bundle and wraps it in the disk image above.
 
-Without a certificate both scripts stop. `LIVERY_ALLOW_ADHOC=1` lets them sign ad-hoc instead,
+Without a certificate the scripts stop. `LIVERY_ALLOW_ADHOC=1` lets them sign ad-hoc instead,
 at a cost: every rebuild is a new identity to macOS, so every permission has to be granted again,
 and the privileged helper is inert because it has no team to trust.
 
-There are no downloadable builds. Handing a bundle to another Mac needs a Developer ID certificate
-and notarization, which come with the paid Apple Developer Program; without them Gatekeeper
-refuses the download. Building from source takes a minute.
-
 Never `cp` over a running Mach-O in place: the kernel keeps the old code-signing hash on the
-vnode and kills every later exec with `OS_REASON_CODESIGNING`. Both scripts replace binaries
+vnode and kills every later exec with `OS_REASON_CODESIGNING`. The scripts replace binaries
 through a fresh inode for that reason.
 
 ## Using the app
@@ -114,9 +127,11 @@ every command and option.
 
 Writing `Icon\r` into another app's bundle is gated by TCC's App Management
 (`kTCCServiceSystemPolicyAppBundles`). Interactive shells inherit the grant from the terminal
-app; the launch agent and the app each need their own. The app asks the first time it repairs an
-icon. For the agent, add `~/.local/bin/livery` under System Settings > Privacy & Security >
-App Management once, or the watcher logs "NSWorkspace refused" on every repair.
+app; the app asks the first time it repairs an icon. An agent installed from the disk image runs
+the tool inside the bundle, which macOS attributes to Livery, so the app's own row should cover
+it. An agent built from source runs `~/.local/bin/livery`, which needs a row of its own: add it
+under System Settings > Privacy & Security > App Management once, or the watcher logs
+"NSWorkspace refused" on every repair.
 
 App Store and pkg installs leave the bundle owned by `root:wheel`, and nothing running as you can
 write into one. Livery writes those through `LiveryHelper`, a LaunchDaemon inside the app bundle
@@ -220,8 +235,9 @@ reports stored icons that miss the grid and `livery refit --apply` corrects them
 1. Settings > Background agent: turn it off, or run `livery agent uninstall`.
 2. Settings > Privileged helper > Remove, or `open ~/Applications/Livery.app --args --remove-helper`.
 3. `livery reset --all` if you want every app back on its own icon.
-4. Delete `~/Applications/Livery.app`, `~/.local/bin/livery`, `~/Library/Application Support/Livery`,
-   `~/Library/Caches/Livery`, `~/Library/Logs/livery.log` and `~/.config/livery`.
+4. Delete `Livery.app` from Applications, `~/.local/bin/livery` if you installed or linked it,
+   `~/Library/Application Support/Livery`, `~/Library/Caches/Livery`, `~/Library/Logs/livery.log`
+   and `~/.config/livery`.
 
 The rows Livery left in Login Items and App Management can be removed from System Settings by
 hand.
@@ -244,7 +260,8 @@ downloads the one you pick, on your behalf, and does not redistribute any of the
 
 ## Known limitations
 
-- No downloadable builds, for want of a Developer ID certificate. Build from source.
+- The disk image is signed with an Apple Development certificate and not notarized, so macOS
+  refuses the first launch until you allow it under Privacy & Security.
 - Resetting an app goes back to its stock icon; there is no undo to the icon it had before.
 - The private-network check on downloads happens at lookup time. A record that changes between
   the lookup and the connection is outside what a client can see; the catalog hosts are fixed.
