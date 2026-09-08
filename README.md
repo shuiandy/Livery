@@ -4,44 +4,41 @@
   <img src="Design/AppIcon-256.png" width="128" alt="Livery">
 </p>
 
-<p align="center">Custom macOS app icons that survive app updates.</p>
+<p align="center">Change the icons of your Mac apps.</p>
 
 <p align="center">English · <a href="README.zh-Hans.md">简体中文</a></p>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="Design/window-dark.png">
-  <img src="Design/window-light.png" alt="Livery's main window: the app grid, one app flagged for attention, and the inspector explaining why it shows a folder in Finder">
+  <img src="Design/window-light.png" alt="Livery's main window: the app grid, the inspector, and a banner about an app whose icon an update removed">
 </picture>
 
-Livery is a SwiftUI app, a command line tool and a launch agent over one core, with no dependencies
-outside the macOS SDK. Give an app an icon once; Livery keeps a copy, notices when an update takes
-it away, and puts it back. The app speaks English and Simplified Chinese, following the system
-language.
+Livery gives any app in your Applications folder a different icon. Pick one from a catalog of
+about 30,000 community-made icons, right in the inspector, or use an `.icns` or `.png` of your own;
+one click writes it in. Livery keeps a copy of every icon it applies and puts it back when an app
+update wipes it out, so the icons you choose stay chosen. The interface is in English and
+Simplified Chinese, following the system language.
 
-## Why
+## What it does
 
-A custom icon on a `.app` is two separate things: the `kHasCustomIcon` bit in the bundle's
-`com.apple.FinderInfo` xattr, and an `Icon\r` file inside the bundle whose resource fork holds the
-artwork. Updaters that rewrite the bundle in place (Setapp, Keystone, pkg installers) keep the
-directory and its xattrs but drop `Icon\r`. Finder then trusts the bit, finds no data, and draws a
-generic folder. A tool that only checks the bit considers those apps fine and never repairs them.
-
-Livery checks both halves and rewrites the icon whenever either is missing. It also handles the
-other failure, a bundle replaced wholesale, which clears the bit and brings the stock icon back.
-
-## What is in the box
-
-- **Livery.app** lists every app in `/Applications` and `~/Applications` (one vendor folder deep,
-  so Setapp and Utilities are included) as Finder draws it right now. Select an app and the
-  inspector shows the icons the catalog has for it; one click downloads the `.icns` and writes it
-  in. A broken app shows the folder or stock icon Finder is showing, with the kept icon as a
-  badge, and the inspector says which half went missing and offers Repair.
-- **`livery`**, the command line tool, does the same from a shell, and can import the icons
+- **Picks icons.** Select an app and the inspector lists the icons the catalog has for it, most
+  downloaded first. Click one and it is downloaded and written into the bundle. *Search more…*
+  opens a full search of the catalog; *Choose file…* takes a local `.icns` or `.png`.
+- **Puts every icon on the macOS grid.** Catalog artwork often ignores the size and corner radius
+  Apple's icons share. Livery measures each icon and scales or clips it so it sits level with its
+  neighbours in the Dock. See [Icon grid](#icon-grid).
+- **Keeps them there.** App updates routinely strip custom icons. A launch agent watches both
+  Applications folders and writes the kept icon back; the app shows what broke and why, and
+  repairs it with one click. See [Why icons disappear](#why-icons-disappear-after-updates).
+- **Handles apps owned by root.** App Store and pkg installs cannot be written by anything running
+  as you. A small privileged helper inside the app does those writes after two one-time
+  approvals. See [Permissions](#permissions).
+- **Works from a shell too.** `livery` does everything the app does, and imports the icons
   Replacicon manages.
-- **The launch agent** runs `livery watch`: it follows both Applications folders with FSEvents,
-  sweeps every ten minutes, and repairs whatever an update broke.
-- **`LiveryHelper`**, a root daemon inside the app bundle, writes into bundles owned by root
-  (App Store and pkg installs). See [Permissions](#permissions).
+
+Livery lists every app in `/Applications` and `~/Applications`, one vendor folder deep, so Setapp
+and Utilities are included. It is a SwiftUI app, a command line tool and a launch agent over one
+core, with no dependencies outside the macOS SDK.
 
 ## Requirements
 
@@ -157,6 +154,19 @@ downloading the icon you picked. There is no analytics, no crash reporting, no u
 Selecting an app sends its name, and nothing else, to the catalog so the inspector can show icons
 for it. Settings > Icon catalog turns that off; lookups then happen only when you click *Look up
 icons* or *Search more…*.
+
+## Why icons disappear after updates
+
+A custom icon on a `.app` is two separate things: the `kHasCustomIcon` bit in the bundle's
+`com.apple.FinderInfo` xattr, and an `Icon\r` file inside the bundle whose resource fork holds the
+artwork. Updaters that rewrite the bundle in place (Setapp, Keystone, pkg installers) keep the
+directory and its xattrs but drop `Icon\r`. Finder then trusts the bit, finds no data, and draws a
+generic folder. A tool that only checks the bit considers those apps fine and never repairs them.
+
+Livery checks both halves and rewrites the icon whenever either is missing. It also handles the
+other failure, a bundle replaced wholesale, which clears the bit and brings the stock icon back.
+The launch agent follows both Applications folders with FSEvents and sweeps every ten minutes, so
+a repair usually lands before you notice the folder.
 
 ## State and safety
 

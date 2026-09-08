@@ -2,7 +2,7 @@ import Foundation
 import LiveryCore
 
 let usage = """
-livery \(Version.string): custom app icons that survive app updates
+livery \(Version.string): change the icons of your Mac apps, and keep them through updates
 
   search <query> [--page N] [--limit N] [--no-preview] [--raw] [--source iconic|macosicons]
         query the icon catalog (50 per page); opens a numbered contact sheet of the first N (default 24)

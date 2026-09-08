@@ -4,34 +4,31 @@
   <img src="Design/AppIcon-256.png" width="128" alt="Livery">
 </p>
 
-<p align="center">让 macOS 自定义 app 图标在更新后依然存在。</p>
+<p align="center">给 Mac 上的 App 换图标。</p>
 
 <p align="center"><a href="README.md">English</a> · 简体中文</p>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="Design/window-dark.png">
-  <img src="Design/window-light.png" alt="Livery 主窗口：app 网格、一个需要处理的 app，以及检查器解释它为什么在访达里显示成文件夹">
+  <img src="Design/window-light.png" alt="Livery 主窗口：app 网格、检查器，以及一条关于图标被更新抹掉的 app 的横幅">
 </picture>
 
-Livery 由一个 SwiftUI app、一个命令行工具和一个 launch agent 组成，共用同一个核心，除 macOS SDK 外没有任何依赖。
-给 app 换一次图标，Livery 会留一份副本，发现更新把图标弄丢时自动补回去。
+Livery 给应用程序文件夹里的任何 app 换一张图标。可以从约 30,000 张社区图标的目录里直接在检查器中挑，也可以用自己的 `.icns` 或 `.png`，
+点一下就写进去。Livery 会给每张用过的图标留一份副本，app 更新把图标抹掉时自动补回去，选好的图标就一直是选好的样子。
+界面有英文和简体中文，跟随系统语言。
 
-## 为什么需要它
+## 它能做什么
 
-`.app` 上的自定义图标其实是两样东西：bundle 的 `com.apple.FinderInfo` 扩展属性里的 `kHasCustomIcon` 标志位，
-以及 bundle 内一个叫 `Icon\r` 的文件，图标数据存在它的资源分支里。原地重写 bundle 的更新器（Setapp、Keystone、pkg 安装器）
-会保留目录和扩展属性，但把 `Icon\r` 删掉。访达于是相信标志位、找不到数据，画出一个普通文件夹。只检查标志位的工具会认为这些 app 一切正常，永远不去修。
+- **挑图标。** 选中一个 app，检查器按下载量列出图标目录里为它准备的图标，点一张就下载并写入 bundle。
+  *Search more…* 打开完整搜索，*Choose file…* 用本地的 `.icns` 或 `.png`。
+- **把每张图标放到 macOS 的网格上。** 社区作品常常不守苹果图标共有的尺寸和圆角。Livery 会测量每张图标，缩放或裁切，让它在程序坞里和邻居齐平。见[图标网格](#图标网格)。
+- **换上了就不会丢。** app 更新经常把自定义图标抹掉。launch agent 盯着两个 Applications 目录，把保存的图标写回去；
+  app 里能看到坏了什么、为什么坏，一键修复。见[图标为什么会在更新后消失](#图标为什么会在更新后消失)。
+- **root 所有的 app 也能换。** App Store 和 pkg 安装的 app 以你的身份写不进去。app 内的一个小特权 helper 在两次一次性授权后代为写入。见[权限](#权限)。
+- **终端里也能用。** `livery` 能做 app 能做的一切，还能导入 Replacicon 管理的图标。
 
-Livery 两半都检查，任何一半缺失就重写图标。另一种失败它也能处理：bundle 被整个替换，标志位被清掉，原厂图标回来了。
-
-## 包含什么
-
-- **Livery.app** 列出 `/Applications` 和 `~/Applications` 下的全部 app（含一层厂商目录，所以 Setapp 和 Utilities 也在内），
-  按访达此刻的画法显示。选中一个 app，检查器就列出图标目录里为它准备的图标，点一下即下载 `.icns` 并写入。
-  坏掉的 app 显示访达当前画出的文件夹或原厂图标，右下角小徽章是保存的图标，检查器说明缺了哪一半，并提供修复按钮。
-- **`livery`** 命令行工具在终端里做同样的事，还能导入 Replacicon 管理的图标。
-- **launch agent** 运行 `livery watch`：用 FSEvents 盯着两个 Applications 目录，每十分钟扫一遍，修好更新弄坏的一切。
-- **`LiveryHelper`** 是 app bundle 内的一个 root 守护进程，负责写入 root 所有的 bundle（App Store 和 pkg 安装的那些）。见[权限](#权限)。
+Livery 列出 `/Applications` 和 `~/Applications` 下的全部 app，含一层厂商目录，所以 Setapp 和 Utilities 也在内。
+它由一个 SwiftUI app、一个命令行工具和一个 launch agent 组成，共用同一个核心，除 macOS SDK 外没有任何依赖。
 
 ## 环境要求
 
@@ -122,6 +119,15 @@ Livery 只为两件事联网：按 app 名字查图标，以及下载你选中�
 
 选中一个 app 会把它的名字发给图标目录，除此之外什么都不发，这样检查器才能显示候选。Settings > Icon catalog 可以关掉；
 关掉后只有点 *Look up icons* 或 *Search more…* 才会查询。
+
+## 图标为什么会在更新后消失
+
+`.app` 上的自定义图标其实是两样东西：bundle 的 `com.apple.FinderInfo` 扩展属性里的 `kHasCustomIcon` 标志位，
+以及 bundle 内一个叫 `Icon\r` 的文件，图标数据存在它的资源分支里。原地重写 bundle 的更新器（Setapp、Keystone、pkg 安装器）
+会保留目录和扩展属性，但把 `Icon\r` 删掉。访达于是相信标志位、找不到数据，画出一个普通文件夹。只检查标志位的工具会认为这些 app 一切正常，永远不去修。
+
+Livery 两半都检查，任何一半缺失就重写图标。另一种失败它也能处理：bundle 被整个替换，标志位被清掉，原厂图标回来了。
+launch agent 用 FSEvents 盯着两个 Applications 目录，每十分钟再扫一遍，通常你还没看见文件夹它就修好了。
 
 ## 状态与安全
 
